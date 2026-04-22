@@ -1,0 +1,28 @@
+{
+  "songs": [
+    {
+      "id": 1,
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "genre": "Rock",
+      "url": "https://www.youtube.com/watch?v=fJ9rUzIMcZQ"
+    },
+    {
+      "id": 2,
+      "title": "Stairway to Heaven",
+      "artist": "Led Zeppelin",
+      "album": "Led Zeppelin IV",
+      "genre": "Rock",
+      "url": "https://www.youtube.com/watch?v=qHFxncb1gRY"
+    },
+    {
+      "id": 3,
+      "title": "Hotel California",
+      "artist": "Eagles",
+      "album": "Hotel California",
+      "genre": "Rock",
+      "url": "https://www.youtube.com/watch?v=098391Q9_Lg"
+    }
+  ]
+}
