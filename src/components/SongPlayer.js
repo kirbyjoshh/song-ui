@@ -63,19 +63,23 @@ const SongPlayer = ({ song }) => {
     return `https://www.youtube.com/watch?v=${url}`; // ultimate fallback
   };
 
+  const playableUrl = song && song.url ? getPlayableUrl(song.url) : '';
+
   return (
     <PlayerContainer>
       <Title>{song.title} <OpenButton href={song.url} target="_blank">OPEN</OpenButton></Title>
       <Subtitle>{song.artist} • {song.album} • {song.genre}</Subtitle>
       <VideoWrapper>
-        <ReactPlayer 
-          url={song.url ? (song.url.includes('youtube.com') || song.url.includes('youtu.be') ? song.url : `https://www.youtube.com/watch?v=${song.url}`) : ''} 
-          width="100%" 
-          height="100%" 
-          controls 
-          playing={false}
-          style={{ position: 'absolute', top: 0, left: 0 }}
-        />
+        {playableUrl && (
+          <ReactPlayer 
+            url={playableUrl} 
+            width="100%" 
+            height="100%" 
+            controls 
+            playing={false}
+            style={{ position: 'absolute', top: 0, left: 0 }}
+          />
+        )}
       </VideoWrapper>
       <SongInfo>
         <Title>{song.title}</Title>
