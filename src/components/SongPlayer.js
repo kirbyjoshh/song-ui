@@ -70,15 +70,17 @@ const SongPlayer = ({ song }) => {
       <Title>{song.title} <OpenButton href={song.url} target="_blank">OPEN</OpenButton></Title>
       <Subtitle>{song.artist} • {song.album} • {song.genre}</Subtitle>
       <VideoWrapper>
-        {playableUrl && (
+        {playableUrl ? (
           <ReactPlayer 
             url={playableUrl} 
             width="100%" 
             height="100%" 
-            controls 
+            controls={true}
             playing={false}
             style={{ position: 'absolute', top: 0, left: 0 }}
           />
+        ) : (
+          <div style={{color: 'white', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>Invalid Video URL</div>
         )}
       </VideoWrapper>
       <SongInfo>
