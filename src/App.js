@@ -1,68 +1,72 @@
 import React, { useState, useEffect } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
 import axios from 'axios';
-import SongList from './components/SongList';
-import SongForm from './components/SongForm';
-import SearchBar from './components/SearchBar';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+  }
+`;
+
+const AppContainer = styled.div`
+  display: flex;
+  height: 100vh;
+`;
 
 const App = () => {
   const [songs, setSongs] = useState([]);
   const [selectedSong, setSelectedSong] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     fetchSongs();
   }, []);
 
   const fetchSongs = async () => {
-    const response = await axios.get('http://localhost:8080/songs');
-    setSongs(response.data);
+    try {
+      const response = await axios.get('https://song-api-v2.onrender.com/songs');
+      setSongs(response.data);
+      if (response.data.length > 0) {
+        setSelectedSong(response.data[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+    }
   };
 
   const handleSearch = async (keyword) => {
     if (keyword) {
-      const response = await axios.get(`http://localhost:8080/songs/search/${keyword}`);
-      setSongs(response.data);
+      try {
+        const response = await axios.get(`https://song-api-v2.onrender.com/songs/search/${keyword}`);
+        setSongs(response.data);
+      } catch (error) {
+        console.error("Error searching songs:", error);
+      }
     } else {
       fetchSongs();
     }
   };
 
-  const handleAdd = () => {
-    setSelectedSong(null);
-    setIsEditing(true);
-  };
-
-  const handleEdit = (song) => {
+  const handleSelectSong = (song) => {
     setSelectedSong(song);
-    setIsEditing(true);
-  };
-
-  const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:8080/songs/${id}`);
-    fetchSongs();
-  };
-
-  const handleSave = async (song) => {
-    if (song.id) {
-      await axios.put(`http://localhost:8080/songs/${song.id}`, song);
-    } else {
-      await axios.post('http://localhost:8080/songs', song);
-    }
-    fetchSongs();
-    setIsEditing(false);
   };
 
   return (
-    <div className="container">
-      <h1 className="my-4">Song UI</h1>
-      <SearchBar onSearch={handleSearch} />
-      <button className="btn btn-primary mb-3" onClick={handleAdd}>Add Song</button>
-      {isEditing ? (
-        <SongForm song={selectedSong} onSave={handleSave} onCancel={() => setIsEditing(false)} />
-      ) : (
-        <SongList songs={songs} onEdit={handleEdit} onDelete={handleDelete} />
-      )}
-    </div>
+    <>
+      <GlobalStyle />
+      <AppContainer>
+        <Sidebar />
+        <MainContent 
+          songs={songs} 
+          selectedSong={selectedSong} 
+          onSelectSong={handleSelectSong}
+          onSearch={handleSearch} 
+        />
+      </AppContainer>
+    </>
   );
 };
 
