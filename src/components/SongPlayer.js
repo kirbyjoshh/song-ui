@@ -56,7 +56,11 @@ const SongPlayer = ({ song }) => {
     if (url.length === 11) {
       return `https://www.youtube.com/watch?v=${url}`;
     }
-    return url;
+    // Also add support for standard watch links directly
+    if (url.includes('youtube.com/watch') || url.includes('youtu.be')) {
+       return url;
+    }
+    return `https://www.youtube.com/watch?v=${url}`; // ultimate fallback
   };
 
   return (
@@ -65,10 +69,11 @@ const SongPlayer = ({ song }) => {
       <Subtitle>{song.artist} • {song.album} • {song.genre}</Subtitle>
       <VideoWrapper>
         <ReactPlayer 
-          url={getPlayableUrl(song.url)} 
+          url={song.url ? (song.url.includes('youtube.com') || song.url.includes('youtu.be') ? song.url : `https://www.youtube.com/watch?v=${song.url}`) : ''} 
           width="100%" 
           height="100%" 
           controls 
+          playing={false}
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       </VideoWrapper>
