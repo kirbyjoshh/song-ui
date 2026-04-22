@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReactPlayer from 'react-player';
+import ReactPlayer from 'react-player/lazy';
 
 const PlayerContainer = styled.div`
   flex: 2;
