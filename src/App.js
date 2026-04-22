@@ -1,21 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
 import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import axios from 'axios';
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    background-color: #121212;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-  }
-`;
-
-const AppContainer = styled.div`
-  display: flex;
-  height: 100vh;
-`;
 
 const App = () => {
   const [songs, setSongs] = useState([]);
@@ -55,9 +41,7 @@ const App = () => {
   };
 
   return (
-    <>
-      <GlobalStyle />
-      <AppContainer>
+    <div className="flex min-h-screen bg-[#121212] text-white font-sans">
         <Sidebar />
         <MainContent 
           songs={songs} 
@@ -65,8 +49,7 @@ const App = () => {
           onSelectSong={handleSelectSong}
           onSearch={handleSearch} 
         />
-      </AppContainer>
-    </>
+    </div>
   );
 };
 
