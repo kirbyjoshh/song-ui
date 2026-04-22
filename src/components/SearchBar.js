@@ -1,29 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
-
-const SearchContainer = styled.form`
-  display: flex;
-  align-items: center;
-  background-color: #282828;
-  border-radius: 50px;
-  padding: 5px 15px;
-  width: 360px;
-  margin-bottom: 20px;
-`;
-
-const SearchInput = styled.input`
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 14px;
-  width: 100%;
-  margin-left: 10px;
-
-  &:focus {
-    outline: none;
-  }
-`;
 
 const SearchBar = ({ onSearch }) => {
   const [keyword, setKeyword] = useState('');
@@ -34,14 +10,15 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <SearchContainer onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mb-5 flex w-[360px] items-center rounded-full bg-[#282828] px-4 py-1.5">
       <FaSearch color="#b3b3b3" />
-      <SearchInput 
+      <input 
         placeholder="Search" 
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
+        className="ml-2 w-full border-0 bg-transparent text-sm text-white outline-none placeholder:text-[#b3b3b3]"
       />
-    </SearchContainer>
+    </form>
   );
 };
 

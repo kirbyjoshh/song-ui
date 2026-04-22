@@ -1,51 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const RecommendedContainer = styled.div`
-  flex: 1;
-`;
-
-const Title = styled.h3`
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-const SongCard = styled.div`
-  display: flex;
-  margin-bottom: 15px;
-  cursor: pointer;
-`;
-
-const Thumbnail = styled.img`
-  width: 120px;
-  height: 90px;
-  border-radius: 5px;
-  margin-right: 15px;
-  object-fit: cover;
-`;
-
-const SongDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const SongTitle = styled.p`
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0;
-`;
-
-const SongArtist = styled.p`
-  font-size: 14px;
-  color: #b3b3b3;
-  margin: 0;
-`;
 
 const Recommended = ({ songs, onSelectSong }) => {
   const getYouTubeThumbnail = (url) => {
     if (!url) return 'https://via.placeholder.com/120x90.png?text=No+Video';
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     const videoId = (match && match[2].length === 11) ? match[2] : null;
     
@@ -60,18 +18,27 @@ const Recommended = ({ songs, onSelectSong }) => {
   };
 
   return (
-    <RecommendedContainer>
-      <Title>Recommended</Title>
+    <aside className="flex-1">
+      <h3 className="mb-5 text-xl font-bold">Recommended</h3>
       {songs.map((song) => (
-        <SongCard key={song.id} onClick={() => onSelectSong(song)}>
-          <Thumbnail src={getYouTubeThumbnail(song.url)} alt={song.title} />
-          <SongDetails>
-            <SongTitle>{song.title}</SongTitle>
-            <SongArtist>{song.artist}</SongArtist>
-          </SongDetails>
-        </SongCard>
+        <button
+          type="button"
+          key={song.id}
+          onClick={() => onSelectSong(song)}
+          className="mb-4 flex w-full cursor-pointer items-start gap-4 text-left"
+        >
+          <img
+            src={getYouTubeThumbnail(song.url)}
+            alt={song.title}
+            className="h-[90px] w-[120px] rounded-[5px] object-cover"
+          />
+          <div className="flex flex-col">
+            <p className="m-0 text-base font-medium text-white">{song.title}</p>
+            <p className="m-0 text-sm text-[#b3b3b3]">{song.artist}</p>
+          </div>
+        </button>
       ))}
-    </RecommendedContainer>
+    </aside>
   );
 };
 
