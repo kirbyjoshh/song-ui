@@ -44,14 +44,19 @@ const SongArtist = styled.p`
 
 const Recommended = ({ songs, onSelectSong }) => {
   const getYouTubeThumbnail = (url) => {
-    if (!url) return '';
-    const videoId = url.split('v=')[1];
-    if (!videoId) return '';
-    const ampersandPosition = videoId.indexOf('&');
-    if (ampersandPosition !== -1) {
-      return `https://img.youtube.com/vi/${videoId.substring(0, ampersandPosition)}/0.jpg`;
+    if (!url) return 'https://via.placeholder.com/120x90.png?text=No+Video';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    
+    if (videoId) {
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
     }
-    return `https://img.youtube.com/vi/${videoId}/0.jpg`;
+    // Fallback if the url is just an ID
+    if (url.length === 11) {
+      return `https://img.youtube.com/vi/${url}/hqdefault.jpg`;
+    }
+    return 'https://via.placeholder.com/120x90.png?text=Invalid+URL';
   };
 
   return (

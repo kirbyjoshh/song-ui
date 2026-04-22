@@ -50,13 +50,28 @@ const SongPlayer = ({ song }) => {
     return <div>Loading...</div>;
   }
 
+  const getPlayableUrl = (url) => {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    
+    if (videoId) {
+      return `https://www.youtube.com/watch?v=${videoId}`;
+    }
+    if (url.length === 11) {
+      return `https://www.youtube.com/watch?v=${url}`;
+    }
+    return url;
+  };
+
   return (
     <PlayerContainer>
       <Title>{song.title} <OpenButton href={song.url} target="_blank">OPEN</OpenButton></Title>
       <Subtitle>{song.artist} • {song.album} • {song.genre}</Subtitle>
       <VideoWrapper>
         <StyledPlayer 
-          url={song.url} 
+          url={getPlayableUrl(song.url)} 
           width="100%" 
           height="100%" 
           controls 
