@@ -6,38 +6,34 @@ const SongPlayer = ({ song }) => {
     return <div className="flex-1 text-white">No song selected</div>;
   }
 
-  const getPlayableUrl = (url) => {
+  const getYouTubeVideoId = (url) => {
     if (!url) return '';
-    console.log("Raw URL from API:", url); // DEBUG
-    
-    // Test if it's already a full youtube or youtu.be URL
-    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
-       return url;
-    }
-    
-    // Test if it's an embed URL
-    if(url.includes('youtube.com/embed/')) {
-        return url;
+
+    const embedMatch = url.match(/youtube\.com\/embed\/([^?&/]+)/i);
+    if (embedMatch?.[1]) {
+      return embedMatch[1];
     }
 
-    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    const videoId = (match && match[2].length === 11) ? match[2] : null;
-    
-    if (videoId) {
-      return `https://www.youtube.com/watch?v=${videoId}`;
-    }
-    
-    // If it's just exactly an 11 char ID string
-    if (url.length === 11) {
-      return `https://www.youtube.com/watch?v=${url}`;
+    const watchMatch = url.match(/[?&]v=([^?&/]+)/i);
+    if (watchMatch?.[1]) {
+      return watchMatch[1];
     }
 
-    // Assume whatever they gave us is the ID since nothing else worked
-    return `https://www.youtube.com/watch?v=${url}`; 
+    const shortMatch = url.match(/youtu\.be\/([^?&/]+)/i);
+    if (shortMatch?.[1]) {
+      return shortMatch[1];
+    }
+
+    const fallbackMatch = url.match(/(?:^|\/)([A-Za-z0-9_-]{11})(?:$|[?&/])/);
+    if (fallbackMatch?.[1]) {
+      return fallbackMatch[1];
+    }
+
+    return url.length === 11 ? url : '';
   };
 
-  const playableUrl = song && song.url ? getPlayableUrl(song.url) : '';
+  const videoId = song && song.url ? getYouTubeVideoId(song.url) : '';
+  const playableUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 
   return (
     <section className="flex-1 mr-5">
@@ -46,14 +42,6 @@ const SongPlayer = ({ song }) => {
           <h2 className="text-2xl font-bold">{song.title}</h2>
           <p className="mt-1 text-sm text-[#b3b3b3]">{song.artist} • {song.album} • {song.genre}</p>
         </div>
-        <a
-          href={song.url}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-md bg-[#1db954] px-3 py-1 text-xs font-semibold text-white no-underline"
-        >
-          OPEN
-        </a>
       </div>
       <div className="relative overflow-hidden rounded-[10px] bg-black pt-[56.25%]">
         {playableUrl ? (
@@ -63,6 +51,15 @@ const SongPlayer = ({ song }) => {
             height="100%" 
             controls={true}
             playing={false}
+            config={{
+              youtube: {
+                playerVars: {
+                  rel: 0,
+                  modestbranding: 1,
+                  origin: window.location.origin,
+                },
+              },
+            }}
             style={{ position: 'absolute', top: 0, left: 0 }}
           />
         ) : (
