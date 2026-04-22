@@ -3,7 +3,7 @@ import ReactPlayer from 'react-player';
 
 const SongPlayer = ({ song }) => {
   if (!song) {
-    return <div className="flex-1 text-white">Loading...</div>;
+    return <div className="flex-1 text-white">No song selected</div>;
   }
 
   const getPlayableUrl = (url) => {
