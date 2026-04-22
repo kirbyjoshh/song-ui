@@ -27,7 +27,7 @@ const App = () => {
 
   const fetchSongs = async () => {
     try {
-      const response = await axios.get('https://song-api-v2.onrender.com/songs');
+      const response = await axios.get('https://song-api-1-d1kz.onrender.com/songs');
       setSongs(response.data);
       if (response.data.length > 0) {
         setSelectedSong(response.data[0]);
@@ -40,7 +40,7 @@ const App = () => {
   const handleSearch = async (keyword) => {
     if (keyword) {
       try {
-        const response = await axios.get(`https://song-api-v2.onrender.com/songs/search/${keyword}`);
+        const response = await axios.get(`https://song-api-1-d1kz.onrender.com/songs/search/${keyword}`);
         setSongs(response.data);
       } catch (error) {
         console.error("Error searching songs:", error);
