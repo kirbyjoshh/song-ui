@@ -46,6 +46,18 @@ const SongPlayer = ({ song }) => {
 
   const getPlayableUrl = (url) => {
     if (!url) return '';
+    console.log("Raw URL from API:", url); // DEBUG
+    
+    // Test if it's already a full youtube or youtu.be URL
+    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+       return url;
+    }
+    
+    // Test if it's an embed URL
+    if(url.includes('youtube.com/embed/')) {
+        return url;
+    }
+
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     const videoId = (match && match[2].length === 11) ? match[2] : null;
@@ -53,14 +65,14 @@ const SongPlayer = ({ song }) => {
     if (videoId) {
       return `https://www.youtube.com/watch?v=${videoId}`;
     }
+    
+    // If it's just exactly an 11 char ID string
     if (url.length === 11) {
       return `https://www.youtube.com/watch?v=${url}`;
     }
-    // Also add support for standard watch links directly
-    if (url.includes('youtube.com/watch') || url.includes('youtu.be')) {
-       return url;
-    }
-    return `https://www.youtube.com/watch?v=${url}`; // ultimate fallback
+
+    // Assume whatever they gave us is the ID since nothing else worked
+    return `https://www.youtube.com/watch?v=${url}`; 
   };
 
   const playableUrl = song && song.url ? getPlayableUrl(song.url) : '';
