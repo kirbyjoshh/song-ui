@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactPlayer from 'react-player';
 
 const SongPlayer = ({ song }) => {
   if (!song) {
@@ -33,7 +32,9 @@ const SongPlayer = ({ song }) => {
   };
 
   const videoId = song && song.url ? getYouTubeVideoId(song.url) : '';
-  const playableUrl = videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  const playableUrl = videoId
+    ? `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&playsinline=1`
+    : '';
 
   return (
     <section className="flex-1 mr-5">
@@ -45,22 +46,14 @@ const SongPlayer = ({ song }) => {
       </div>
       <div className="relative overflow-hidden rounded-[10px] bg-black pt-[56.25%]">
         {playableUrl ? (
-          <ReactPlayer 
-            url={playableUrl} 
-            width="100%" 
-            height="100%" 
-            controls={true}
-            playing={false}
-            config={{
-              youtube: {
-                playerVars: {
-                  rel: 0,
-                  modestbranding: 1,
-                  origin: window.location.origin,
-                },
-              },
-            }}
-            style={{ position: 'absolute', top: 0, left: 0 }}
+          <iframe
+            key={videoId}
+            src={playableUrl}
+            title={song.title}
+            className="absolute left-0 top-0 h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
           />
         ) : (
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white">Invalid Video URL</div>
