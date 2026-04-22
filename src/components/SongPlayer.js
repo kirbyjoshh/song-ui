@@ -15,12 +15,6 @@ const VideoWrapper = styled.div`
   overflow: hidden;
 `;
 
-const StyledPlayer = styled(ReactPlayer)`
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-
 const SongInfo = styled.div`
   margin-top: 20px;
 `;
@@ -70,11 +64,12 @@ const SongPlayer = ({ song }) => {
       <Title>{song.title} <OpenButton href={song.url} target="_blank">OPEN</OpenButton></Title>
       <Subtitle>{song.artist} • {song.album} • {song.genre}</Subtitle>
       <VideoWrapper>
-        <StyledPlayer 
+        <ReactPlayer 
           url={getPlayableUrl(song.url)} 
           width="100%" 
           height="100%" 
           controls 
+          style={{ position: 'absolute', top: 0, left: 0 }}
         />
       </VideoWrapper>
       <SongInfo>
