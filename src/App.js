@@ -3,7 +3,7 @@ import Sidebar from './components/Sidebar';
 import MainContent from './components/MainContent';
 import axios from 'axios';
 
-const API_BASE_URL = 'https://song-api-1-d1kz.onrender.com';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://song-api-1-d1kz.onrender.com';
 
 const App = () => {
   const [songs, setSongs] = useState([]);
